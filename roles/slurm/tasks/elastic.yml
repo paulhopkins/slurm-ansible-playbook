@@ -1,12 +1,12 @@
 ---
 - name: install Python 3.6
-  yum: name=rh-python36 state=installed
+  yum: name=python36 state=installed
 
 - name: install OCI client
   pip:
     name: oci-cli
     virtualenv: /opt/oci-cli
-    virtualenv_command: /opt/rh/rh-python36/root/bin/python -m venv
+    virtualenv_command: /usr/bin/python36 -m venv
 
 - file:
     path: "{{ slurm_elastic.oracle.config_directory }}"
