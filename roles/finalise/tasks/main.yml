@@ -1,7 +1,7 @@
 ---
 - name: checkout Ansible repo
   git:
-    repo: https://github.com/ACRC/slurm-ansible-playbook.git
+    repo: https://github.com/paulhopkins/slurm-ansible-playbook.git
     version: master
     dest: /home/opc/slurm-ansible-playbook
   when: "'management' in group_names"
