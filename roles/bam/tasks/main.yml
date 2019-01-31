@@ -1,0 +1,48 @@
+---
+- name: install BAM run dependencies
+  yum:
+    name:
+      - openmpi3
+    state: present
+- name: install BAM build dependencies
+  yum:
+    name:
+      - openmpi3-devel
+    state: present
+  when: "'management' in group_names"
+
+- name: make bam directory
+  file:
+    path: /mnt{{ filesystem_mount_point }}/apps/bam
+    owner: opc
+    group: opc
+    state: directory
+  when: "'management' in group_names"
+
+- name: download BAM source
+  git:
+    repo: git@github.com:cardiffgravity/bam-private.git
+    dest: /mnt{{ filesystem_mount_point }}/apps/bam/
+    accept_hostkey: yes
+  become: yes
+  become_user: opc
+  register: download_bam_source
+  when: "'management' in group_names"
+
+- name: "BAM: Make clean"
+  make:
+    chdir: /mnt{{ filesystem_mount_point }}/apps/bam/
+    target: clean
+  become: yes
+  become_user: opc
+  register: bam_make_clean
+  when: "'management' in group_names"
+
+- name: "BAM: Make"
+  make:
+    chdir: /mnt{{ filesystem_mount_point }}/apps/bam/
+    params:
+      CC: /usr/lib64/openmpi3/bin/mpicc
+  become: yes
+  become_user: opc
+  when: "'management' in group_names"
