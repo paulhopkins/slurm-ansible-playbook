@@ -2,4 +2,3 @@
 - hosts: compute
   roles:
     - debug-tools
-    - slurm

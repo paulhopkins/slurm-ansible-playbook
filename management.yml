@@ -3,5 +3,5 @@
   roles:
     - clustershell
     - mysql
-    - slurm
     - debug-tools
+    - bam
