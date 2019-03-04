@@ -24,6 +24,8 @@
     repo: git@github.com:cardiffgravity/bam-private.git
     dest: /mnt{{ filesystem_mount_point }}/apps/bam/
     accept_hostkey: yes
+    ssh_opts: -i /home/opc/oci_api_key.pem
+    force: yes
   become: yes
   become_user: opc
   register: download_bam_source
@@ -38,11 +40,38 @@
   register: bam_make_clean
   when: "'management' in group_names"
 
+- name: make bam exe directory
+  file:
+    path: /mnt{{ filesystem_mount_point }}/apps/bam/exe
+    state: directory
+  become: yes
+  become_user: opc
+  when: "'management' in group_names"
+
 - name: "BAM: Make"
   make:
     chdir: /mnt{{ filesystem_mount_point }}/apps/bam/
     params:
       CC: /usr/lib64/openmpi3/bin/mpicc
+  become: yes
+  become_user: opc
+  when: "'management' in group_names"
+
+- name: make bam run directory
+  file:
+    path: /mnt{{ filesystem_mount_point }}/home/opc
+    owner: opc
+    group: opc
+    state: directory
+  when: "'management' in group_names"
+
+- name: download BAM submissions
+  git:
+    repo: git@github.com:paulhopkins/BAM-submissions.git
+    dest: /mnt{{ filesystem_mount_point }}/home/opc/bam-run/
+    accept_hostkey: yes
+    ssh_opts: -i /home/opc/oci_api_key.pem
+    force: yes
   become: yes
   become_user: opc
   when: "'management' in group_names"
