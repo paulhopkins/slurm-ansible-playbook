@@ -11,6 +11,12 @@
     state: present
   when: "'management' in group_names"
 
+- name: set key permissions
+  file:
+    path: /home/opc/oci_api_key.pem
+    mode: 0600
+  when: "'management' in group_names"
+
 - name: make bam directory
   file:
     path: /mnt{{ filesystem_mount_point }}/apps/bam
