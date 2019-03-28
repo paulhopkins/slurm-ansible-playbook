@@ -3,3 +3,4 @@
   roles:
     - debug-tools
     - slurm
+    - bam

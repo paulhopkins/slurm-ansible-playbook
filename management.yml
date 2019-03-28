@@ -5,3 +5,4 @@
     - mysql
     - slurm
     - debug-tools
+    - bam
